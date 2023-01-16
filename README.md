@@ -30,7 +30,7 @@ By default, make will put the object files (.o) in the `obj` folder and output t
 To create a project, `mkpj` will ask you several questions such as
 - The project name
 - The target (the ouput from the Makefile)
-- The output file extension (mainly itended for windows user, as the .EXE is needed)
+- The output file extension 
 
 Just type
 ```
@@ -62,8 +62,6 @@ On linux, use
 # sudo make install
 ```
 to install the program in the `/usr/local/bin` folder.
-
-On windows, you sould add the `bin` folder to your path variable once compilation is done.
 
 > **If you don't want to compile from the source, you can use the provided binaries in the release section of the repository.**  
 
