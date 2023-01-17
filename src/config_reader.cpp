@@ -47,6 +47,7 @@ Project Config::get_project_info() {
     Project project;
     project.name = this->name;
     project.path = std::filesystem::current_path();
+    project.target = this->target;
     project.extension = this->extension;
     return project;
 }

@@ -59,7 +59,10 @@ bool create_makefile(const Project& project, bool regen) {
     if (!makefile.is_open())
         return false;
 
-    std::string target = project.name;
+    std::string target = project.target;
+    if (target.empty())
+        target = project.name;
+
     if (!project.extension.empty())
         target += "." + project.extension;
 
@@ -120,7 +123,7 @@ void create_project() {
     Project project;
     project.name = get_user_input("Project name:");
     project.target = get_user_input("Output file name [default: " + project.name + "]:");
-    project.target = get_user_input("Output file extension [default: none]:");
+    project.extension = get_user_input("Output file extension [default: none]:");
     project.path = std::filesystem::current_path() / project.name;
 
     if (project.target.empty())

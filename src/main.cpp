@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
     options.add_options()
         ("c,create", "Creates the project")
         ("m,makefile", "Creates or updates the Makefile")
+        ("t,tarball", "Creates a tarball of the project")
         ("h,help", "Print usage")
         ;
 
@@ -64,6 +65,20 @@ int main(int argc, char **argv) {
                 std::cerr << RED << "Error: Could not create Makefile" << RESET << std::endl;
                 exit(1);
             }
+        }
+
+        else if (result.count("tarball")) {
+            // The tarball contains the project include, src and Makefile
+
+            Config config(std::filesystem::current_path() / ".mkpj.conf");
+            if (!config.load()) {
+                std::cerr << RED << "Error: Could not load config file" << RESET << std::endl;
+                exit(1);
+            }
+
+            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile";
+            std::cerr << command << std::endl;
+            system(command.c_str());
         }
 
         else {
