@@ -1,8 +1,5 @@
 #include "../include/config_reader.hpp"
 
-#include "../include/colors.hpp"
-#include <iostream>
-
 #include <sstream>
 #include <filesystem>
 

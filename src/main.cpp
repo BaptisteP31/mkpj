@@ -58,19 +58,7 @@ int main(int argc, char **argv) {
                 exit(1);
             }
 
-            //print the config
-            std::cerr << YELLOW << "Config:" << RESET << std::endl;
-        
-            std::cerr << "Project name: " << config.name << std::endl;
-            std::cerr << "Project target: " << config.target << std::endl;
-            std::cerr << "Project extension: " << config.extension << std::endl;
-
             Project project = config.get_project_info();
-
-            std::cerr << "Project path: " << project.path << std::endl;
-            std::cerr << "Project name: " << project.name << std::endl;
-            std::cerr << "Project extention: " << project.extension << std::endl;
-
 
             if (!create_makefile(project, true)) {
                 std::cerr << RED << "Error: Could not create Makefile" << RESET << std::endl;
