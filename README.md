@@ -1,4 +1,12 @@
-# mkpj
+<img src="mkpj.png" height="300">
+
+![licence](https://img.shields.io/github/license/BaptisteP31/mkpj)
+![release](https://img.shields.io/github/v/release/BaptisteP31/mkpj?include_prereleases)
+![Downloads](https://img.shields.io/github/downloads/BaptisteP31/mkpj/total)
+![size](https://img.shields.io/github/languages/code-size/BaptisteP31/mkpj)
+![issue](https://img.shields.io/github/issues-raw/BaptisteP31/mkpj)
+
+# MKPJ
 > a simple command line tool used to create simple C++ projects !
 
 ## What it does ?
