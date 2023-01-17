@@ -1,25 +1,25 @@
 CC = g++
-CFLAGS = -Wall -std=c++17
-INCLUDE = -Iinclude
-SRC = src
-OBJ = obj
+CFLAGS = -Wall -std=c++17 -Iinclude
+LDFLAGS =
+LDLIBS =
+SRC = $(wildcard src/*.cpp)
+OBJ = $(SRC:src/%.cpp=obj/%.o)
 BIN = bin
 TARGET = mkpj
 
 all: $(TARGET)
 
-$(TARGET): $(OBJ)/main.o
-	@mkdir -p $(BIN)
-	@$(CC) $(CFLAGS) $(INCLUDE) -o $(BIN)/$(TARGET) $^
+$(TARGET): $(OBJ)
+	$(CC) $(LDFLAGS) -o $(BIN)/$@ $^ $(LDLIBS)
 
-$(OBJ)/main.o: $(SRC)/main.cpp
-	@mkdir -p $(OBJ)
-	@$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
+obj/%.o: src/%.cpp
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	@rm -rf $(OBJ) $(BIN)
+	rm -f $(OBJ) $(BIN)/$(TARGET)
 
-.PHONY: all clean
+fclean: clean
+	rm -f $(TARGET) $(BIN)/$(TARGET)
+
 install: all
-	@cp $(BIN)/$(TARGET) /usr/local/bin
-
+	cp $(BIN)/$(TARGET) /usr/local/bin
