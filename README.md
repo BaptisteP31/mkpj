@@ -38,6 +38,18 @@ $ mkpj -c
 ```
 to create a new project.
 
+You can also use
+```
+$ mkpj -m
+```
+to re create the Makefile of an existing project, it is useful if you edited the configuration file (`.mkpj.conf` at the root of your project).
+
+Finally, you can use
+```
+$ mkpj -t
+```
+to export the project to a tarball.
+
 ---
 
 <br>
