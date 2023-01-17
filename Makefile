@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -std=c++17 -Iinclude
 LDFLAGS =
-LDLIBS =
+LDLIBS = -lcurl
 SRC = $(wildcard src/*.cpp)
 OBJ = $(SRC:src/%.cpp=obj/%.o)
 BIN = bin

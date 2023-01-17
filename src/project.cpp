@@ -1,10 +1,13 @@
 #include "../include/project.hpp"
 #include "../include/config_reader.hpp"
+#include "../include/colors.hpp"
+#include "../include/download.hpp"
 
 #include <string>
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <map>
 
 
 std::string get_user_input(std::string message) {
@@ -154,14 +157,57 @@ bool create_readme(const Project& project) {
     return true;
 }
 
-void create_project() {
-    std::cout << BLUE << "Creating project..." << RESET << std::endl;
+bool get_licence(const Project& project) {
+    std::string rep = get_user_input("Would you like to add a licence? [y/n]");
 
+    const std::string reponses[] = {"y", "Y"};
+    bool no_licence = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;
+
+    if (no_licence)
+        return false;
+
+    std::cout << std::endl << "Available licences:" << std::endl;
+    std::cout << "1. GPL" << std::endl;
+    std::cout << "2. MIT" << std::endl;
+    std::cout << "3. Apache" << std::endl;
+    std::cout << "4. BSD" << std::endl;
+    std::cout << "5. Mozilla" << std::endl << std::endl;
+
+    std::string licence = get_user_input("Licence number:");
+
+    std::map <std::string, std::string> licences = {
+        {"1", "https://www.gnu.org/licenses/gpl-3.0.txt"},
+        {"2", "https://pastebin.com/raw/23YFqm6x"},
+        {"3", "https://www.apache.org/licenses/LICENSE-2.0.txt"},
+        {"4", "https://raw.githubusercontent.com/Illumina/licenses/master/Simplified-BSD-License.txt"},
+        {"5", "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"}
+    };
+
+    std::string licence_url = licences[licence];
+    std::cout << YELLOW << "Downloading licence..." << RESET << std::endl;
+    download_from_internet(licence_url, std::filesystem::current_path() / project.name / "LICENCE");
+    std::cout << GREEN << "Licence downloaded" << RESET << std::endl;
+
+    return true;
+}
+
+void create_project() {
     Project project;
+
     project.name = get_user_input("Project name:");
+    if (project.name.empty()) {
+        std::cerr << RED << "Error: Project name cannot be empty" << RESET << std::endl; 
+        exit(1);
+    } 
+
+    project.path = std::filesystem::current_path() / project.name;
+    if (std::filesystem::exists(project.path)) {
+        std::cerr << RED << "Error: Project already exists" << RESET << std::endl;
+        exit(1);
+    }
+
     project.target = get_user_input("Output file name [default: " + project.name + "]:");
     project.extension = get_user_input("Output file extension [default: none]:");
-    project.path = std::filesystem::current_path() / project.name;
 
     if (project.target.empty())
         project.target = project.name;
@@ -183,6 +229,8 @@ void create_project() {
         std::cerr<< RED << "Error: Could not create README file" << RESET << std::endl;
         exit(1);
     }
+
+    get_licence(project);
 
     std::cout << GREEN << "Project created!" << RESET << std::endl;
 }

@@ -24,6 +24,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../include/project.hpp"
 #include "../include/colors.hpp"
 
+#include "../include/download.hpp"
+
 #include <iostream>
 #include <filesystem>
 #include <fstream>

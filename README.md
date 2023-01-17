@@ -55,7 +55,7 @@ to export the project to a tarball.
 <br>
 
 ## Compilation
-> GNU g++ is expected to be present on the system  
+> GNU g++ is expected to be present on the system, as well as curl.  
 
 You can compile the programm on your system using
 ```
