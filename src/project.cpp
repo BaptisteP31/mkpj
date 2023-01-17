@@ -117,6 +117,43 @@ bool create_config(const Project& project) {
     return true;
 }
 
+bool create_readme(const Project& project) {
+    std::ofstream readme(std::filesystem::current_path() / project.name / "README.md");
+
+    if (!readme.is_open())
+        return false;
+
+    readme
+        << "# " << project.name << "  " << std::endl << std::endl
+
+        << "### Compilation" << std::endl
+        << "```" << std::endl
+        << "make" << std::endl
+        << "```" << std::endl
+        << "---" << std::endl << std::endl
+
+        << "### Execution" << std::endl
+        << "```" << std::endl
+        << "bin/" << project.target << std::endl
+        << "```" << std::endl
+        << "---" << std::endl << std::endl
+
+        << "### Cleaning" << std::endl
+        << "```" << std::endl
+        << "make clean" << std::endl
+        << "```" << std::endl
+        << "---" << std::endl << std::endl
+
+        << "### Installation" << std::endl
+        << "```" << std::endl
+        << "sudo make install" << std::endl
+        << "```" << std::endl;
+
+    readme.close();
+
+    return true;
+}
+
 void create_project() {
     std::cout << BLUE << "Creating project..." << RESET << std::endl;
 
@@ -139,6 +176,11 @@ void create_project() {
 
     if (!create_config(project)) {
         std::cerr<< RED << "Error: Could not create config file" << RESET << std::endl;
+        exit(1);
+    }
+
+    if (!create_readme(project)) {
+        std::cerr<< RED << "Error: Could not create README file" << RESET << std::endl;
         exit(1);
     }
 
