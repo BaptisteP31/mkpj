@@ -1,4 +1,5 @@
-<img src="mkpj.png" height="300">
+![mkpj](mkpj_768.png)
+
 
 ![licence](https://img.shields.io/github/license/BaptisteP31/mkpj)
 ![release](https://img.shields.io/github/v/release/BaptisteP31/mkpj?include_prereleases)
