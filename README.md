@@ -29,8 +29,6 @@ The Makefile includes the `all`, `install` and `clean` targets. (The `install` t
 
 By default, make will put the object files (.o) in the `obj` folder and output the binary in the `bin` folder.
 
----
-
 <br>
 
 ## How to use ?
@@ -58,8 +56,6 @@ $ mkpj -t
 ```
 to export the project to a tarball.
 
----
-
 <br>
 
 ## Compilation
@@ -71,8 +67,6 @@ $ make
 ```
 It will generate a mkpj file in the `bin` folder.  
 You can already use this binary file to execute the program but it is recommanded to install it.  
-
----
 
 <br>
 
@@ -89,8 +83,6 @@ To install the binary file on linux, use
 ```
 # sudo mv mkpj /usr/local/bin
 ```
-
----
 
 <br>
 
