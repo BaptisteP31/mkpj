@@ -12,7 +12,7 @@ ProjectName/
     |_ include/
     |_ obj/
     |_ src/
-    |   |_ ProjectName.cpp
+    |   |_ main.cpp
     |_ Makefile
 ```
 

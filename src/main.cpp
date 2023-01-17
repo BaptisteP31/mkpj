@@ -39,44 +39,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     #define BLUE ""
 #endif
 
-void create_project() {
-    std::cout << BLUE << "Creating project..." << RESET << std::endl;
-    
-    std::string project_name;
-    std::cout << "Project name: ";
-    getline(std::cin, project_name);
-
+struct Project {
+    std::string name;
     std::string target;
-    std::cout << "Target [default: " << project_name << "]: ";
-    getline(std::cin, target);
-
-    if (target.empty())
-        target = project_name;
-
-    std::cout << "Output file extension [default: none]: ";
     std::string extension;
-    getline(std::cin, extension);
+};
 
-    if (!extension.empty())
-        target += "." + extension;
+std::string get_user_input(std::string message) {
+
+    std::cout << message << " ";
+    std::string input;
+    getline(std::cin, input);
+    return input;
+}
+
+bool create_project_directory(const Project& project) {
 
     try {
-        std::filesystem::create_directory(project_name);
-        std::filesystem::create_directory(project_name + "/src");
-        std::filesystem::create_directory(project_name + "/include");
-        std::filesystem::create_directory(project_name + "/obj");
-        std::filesystem::create_directory(project_name + "/bin");
-    } catch (std::filesystem::filesystem_error& e) {
-        std::cout << RED << "Error: " << e.what() << RESET << std::endl;
-        exit(1);
-    }
+        std::filesystem::create_directory(project.name);
+        std::filesystem::create_directory(project.name + "/src");
+        std::filesystem::create_directory(project.name + "/include");
+        std::filesystem::create_directory(project.name + "/obj");
+        std::filesystem::create_directory(project.name + "/bin");
 
-    std::ofstream main_file(std::filesystem::current_path() / project_name  / "src" / "main.cpp");
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
 
-    if (!main_file.is_open()) {
-        std::cout << RED << "Error: Could not create main file" << RESET << std::endl;
-        exit(1);
     }
+    return true;
+}
+
+bool create_main(const Project& project) {
+    std::ofstream main_file(std::filesystem::current_path() / project.name  / "src" / "main.cpp");
+
+    if (!main_file.is_open())
+        return false;
 
     main_file 
         << "// This is the main file of your project" << std::endl << std::endl
@@ -86,12 +83,14 @@ void create_project() {
 
     main_file.close();
 
-    std::ofstream makefile(std::filesystem::current_path() / project_name / "Makefile");
+    return true;
+}
 
-    if (!makefile.is_open()) {
-        std::cout << RED << "Error: Could not create Makefile" << RESET << std::endl;
-        exit(1);
-    }
+bool create_makefile(const Project& project) {
+    std::ofstream makefile(std::filesystem::current_path() / project.name / "Makefile");
+
+    if (!makefile.is_open())
+        return false;
 
     makefile
     << "CC = g++" << std::endl
@@ -100,7 +99,7 @@ void create_project() {
     << "SRC = src" << std::endl
     << "OBJ = obj" << std::endl
     << "BIN = bin" << std::endl
-    << "TARGET = " << target << std::endl
+    << "TARGET = " << project.target << std::endl
     << std::endl
     << "all: $(TARGET)" << std::endl
     << std::endl
@@ -120,9 +119,33 @@ void create_project() {
     << "\t@cp $(BIN)/$(TARGET) /usr/local/bin" << std::endl
     << std::endl;
 
-    std::cout << GREEN << "Project created!" << RESET << std::endl;
+    makefile.close();
 
+    return true;
 }
+
+void create_project() {
+    std::cout << BLUE << "Creating project..." << RESET << std::endl;
+
+    Project project;
+    project.name = get_user_input("Project name: ");
+    project.target = get_user_input("Output file name [default: " + project.name + "]: ");
+    project.target = get_user_input("Output file extension [default: none]: ");
+
+    if (project.target.empty())
+        project.target = project.name;
+
+    if (!project.extension.empty())
+        project.target += "." + project.extension;
+
+    if (!create_project_directory(project) || !create_main(project) || !create_makefile(project)) {
+        std::cerr<< RED << "Error: Could not create project" << RESET << std::endl;
+        exit(1);
+    }
+
+    std::cout << GREEN << "Project created!" << RESET << std::endl;
+}
+
 
 int main(int argc, char **argv) {
     cxxopts::Options options("mkpj", "MakeProject - A simple project creator");
@@ -140,7 +163,7 @@ int main(int argc, char **argv) {
             exit(0);
         }
 
-        else if (result.count("init")) {
+        else if (result.count("create")) {
             create_project();
             exit(0);
         }
