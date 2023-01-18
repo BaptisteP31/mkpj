@@ -92,8 +92,8 @@ bool create_makefile(const Project& project, bool regen) {
         << "fclean: clean" << std::endl
         << "\trm -f $(TARGET)" << std::endl
         << std::endl
-        << "re: fclean all" << std::endl;
-    
+        << "configure:" << std::endl
+        << "mkdir -p obj && mkdir -p bin" << std::endl;
 
     makefile.close();
 
@@ -130,6 +130,9 @@ bool create_readme(const Project& project) {
         << "# " << project.name << "  " << std::endl << std::endl
 
         << "### Compilation" << std::endl
+        << "```" << std::endl
+        << "make configure" << std::endl
+        << "```" << std::endl << std::endl
         << "```" << std::endl
         << "make" << std::endl
         << "```" << std::endl

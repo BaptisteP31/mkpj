@@ -60,7 +60,13 @@ to export the project to a tarball.
 <br>
 
 ## Compilation
-> GNU g++ is expected to be present on the system, as well as curl.  
+> GNU g++ is expected to be present on the system, as well as libcurl.  
+
+
+To check if libcurl is installed on your system, use
+```
+$ ldconfig -p | grep libcurl
+```
 
 You shall prepare the project for compilation using
 ```
@@ -77,13 +83,15 @@ You can already use this binary file to execute the program but it is recommande
 <br>
 
 ## Installation
+### From source:  
 On linux, use
 ```
 # sudo make install
 ```
 to install the program in the `/usr/local/bin` folder.
 
-> **If you don't want to compile from the source, you can use the provided binaries in the release section of the repository.**  
+### From binary:
+> **If you don't want to compile from the source, you can use the provided binary in the release section of the repository.**  
 
 To install the binary file on linux, use
 ```
@@ -92,4 +100,5 @@ To install the binary file on linux, use
 
 <br>
 
+---
 This projects uses part of the [CXXOPTS project](https://github.com/jarro2783/cxxopts).
