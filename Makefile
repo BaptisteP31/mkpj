@@ -21,5 +21,8 @@ clean:
 fclean: clean
 	rm -f $(TARGET) $(BIN)/$(TARGET)
 
+configure:
+	mkdir obj && mkdir bin
+
 install: all
 	cp $(BIN)/$(TARGET) /usr/local/bin

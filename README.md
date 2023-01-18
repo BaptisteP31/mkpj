@@ -62,6 +62,11 @@ to export the project to a tarball.
 ## Compilation
 > GNU g++ is expected to be present on the system, as well as curl.  
 
+You shall prepare the project for compilation using
+```
+$ make configure
+```
+
 You can compile the programm on your system using
 ```
 $ make
