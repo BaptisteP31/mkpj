@@ -30,10 +30,21 @@ bool Config::load() {
         if (key == "name ")
             // Remove the first character (space) if the value is not empty using ternary operator
             this->name = value.empty() ? value : value.substr(1);
+        
         else if (key == "target ")
             this->target = value.empty() ? value : value.substr(1);
+        
         else if (key == "extension ")
             this->extension = value.empty() ? value : value.substr(1);
+        
+        else if (key == "additional_files ")
+            this->additional_files = value.empty() ? value : value.substr(1);
+        
+        else if (key == "is_licenced ") {
+            if (value == " true") this->is_licenced = true;
+            else if (value == " false") this->is_licenced = false;
+        }
+            
     }
 
     return true;

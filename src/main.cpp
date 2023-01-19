@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
     cxxopts::Options options("mkpj", "MakeProject - A simple project creator");
     options.add_options()
         ("c,create", "Creates the project")
+        ("a,add", "Adds a cpp/hpp file to the project")
         ("m,makefile", "Creates or updates the Makefile")
         ("t,tarball", "Creates a tarball of the project")
         ("h,help", "Print usage")
@@ -78,7 +79,7 @@ int main(int argc, char **argv) {
                 exit(1);
             }
 
-            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile";
+            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" + (config.is_licenced ? " LICENCE " : " ") + config.additional_files;
             std::cerr << command << std::endl;
             system(command.c_str());
         }

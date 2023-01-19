@@ -3,12 +3,7 @@
 #include "../include/colors.hpp"
 #include "../include/download.hpp"
 
-#include <string>
-#include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <map>
-
+#include <bits/stdc++.h>
 
 std::string get_user_input(std::string message) {
 
@@ -113,7 +108,10 @@ bool create_config(const Project& project) {
         << "# Edit this if you know what you are doing" << std::endl
         << "name = " << project.name << std::endl
         << "target = " << project.target << std::endl
-        << "extension = " << project.extension << std::endl;
+        << "extension = " << project.extension << std::endl
+        << "is_licenced = " << ((project.is_licenced)? "true" : "false") << std::endl
+        << "# Additonal files to be added to the tarball" << std::endl
+        << "additional_files = " << std::endl;
 
     config_file.close();
 
@@ -160,14 +158,16 @@ bool create_readme(const Project& project) {
     return true;
 }
 
-bool get_licence(const Project& project) {
+bool get_licence(Project& project) {
     std::string rep = get_user_input("Would you like to add a licence? [y/n]");
 
     const std::string reponses[] = {"y", "Y"};
     bool no_licence = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;
 
-    if (no_licence)
-        return false;
+    if (no_licence) {
+        project.is_licenced = false;
+        return true;
+    }
 
     std::cout << std::endl << "Available licences:" << std::endl;
     std::cout << "1. GPL" << std::endl;
@@ -187,10 +187,16 @@ bool get_licence(const Project& project) {
     };
 
     std::string licence_url = licences[licence];
+    if (licence_url.empty()) {
+        std::cerr << RED << "Error: Licence not found" << RESET << std::endl;
+        return false;
+    }
+
     std::cout << YELLOW << "Downloading licence..." << RESET << std::endl;
     download_from_internet(licence_url, std::filesystem::current_path() / project.name / "LICENCE");
     std::cout << GREEN << "Licence downloaded" << RESET << std::endl;
 
+    project.is_licenced = true;
     return true;
 }
 
@@ -209,17 +215,40 @@ void create_project() {
         exit(1);
     }
 
-    project.target = get_user_input("Output file name [default: " + project.name + "]:");
-    project.extension = get_user_input("Output file extension [default: none]:");
+    std::string temp_target = get_user_input("Output file name [default: " + project.name + "]:");
+
+
+    if (temp_target.find(".") != std::string::npos) {
+        std::stringstream ss(temp_target);
+        std::string item;
+        std::vector<std::string> tokens;
+        while (std::getline(ss, item, '.')) {
+            tokens.push_back(item);
+        }
+
+        if(tokens.size() < 2) {
+            std::cerr << RED << "Error: Invalid target name" << RESET << std::endl;
+            exit(1);
+        }
+        project.target = tokens[0];
+        project.extension = tokens[1];
+    }
+
+    if (project.extension.empty())
+        project.extension = get_user_input("Output file extension [default: none]:");
 
     if (project.target.empty())
         project.target = project.name;
 
-    if (!project.extension.empty())
-        project.target += "." + project.extension;
-
     if (!create_project_directory(project) || !create_main(project) || !create_makefile(project)) {
         std::cerr<< RED << "Error: Could not create project" << RESET << std::endl;
+        exit(1);
+    }
+
+    get_licence(project);
+
+    if (!create_readme(project)) {
+        std::cerr<< RED << "Error: Could not create README file" << RESET << std::endl;
         exit(1);
     }
 
@@ -228,12 +257,42 @@ void create_project() {
         exit(1);
     }
 
-    if (!create_readme(project)) {
-        std::cerr<< RED << "Error: Could not create README file" << RESET << std::endl;
+    std::cout << GREEN << "Project created!" << RESET << std::endl;
+}
+
+void add_cpp_hpp() {
+    std::filesystem::path src_path = std::filesystem::current_path() / "src";
+    std::filesystem::path inc_path = std::filesystem::current_path() / "include";
+
+    if (!std::filesystem::exists(src_path) || !std::filesystem::exists(inc_path)) {
+        std::cerr << RED << "Error: You must be in a project directory" << RESET << std::endl;
         exit(1);
     }
 
-    get_licence(project);
+    std::string name = get_user_input("Name of the cpp/hpp couple:");
+    if (name.empty()) {
+        std::cerr << RED << "Error: Name cannot be empty" << RESET << std::endl;
+        exit(1);
+    }
 
-    std::cout << GREEN << "Project created!" << RESET << std::endl;
+    std::ofstream cpp_file(src_path / (name + ".cpp"));
+    std::ofstream hpp_file(inc_path / (name + ".hpp"));
+
+    if (!cpp_file.is_open() || !hpp_file.is_open()) {
+        std::cerr << RED << "Error: Could not create files" << RESET << std::endl;
+        exit(1);
+    }
+
+    cpp_file << "#include \"../include/" << name << ".hpp\"" << std::endl << std::endl;
+    
+    hpp_file 
+            << "#pragma once" << std::endl << std::endl
+            << "#ifndef " << name << "_HPP" << std::endl
+            << "#define " << name << "_HPP" << std::endl << std::endl
+            << "#endif" << std::endl;
+
+    cpp_file.close();
+    hpp_file.close();
+
+    std::cout << GREEN << "Files created!" << RESET << std::endl;
 }
