@@ -33,3 +33,4 @@
 
 # Ignore vscode
 .vscode
+bin
