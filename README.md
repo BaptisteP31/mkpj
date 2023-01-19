@@ -51,11 +51,17 @@ $ mkpj -m
 ```
 to re create the Makefile of an existing project, it is useful if you edited the configuration file (`.mkpj.conf` at the root of your project).
 
+You can add a hpp/cpp combo to your project using
+```
+$ mkpj -a
+```
+
 Finally, you can use
 ```
 $ mkpj -t
 ```
 to export the project to a tarball.
+> You can add additionnal files to the tarball by modifying the `additional_files` property in the `.mkpj.conf` file at the root of your project.
 
 <br>
 
@@ -83,6 +89,8 @@ You can already use this binary file to execute the program but it is recommande
 <br>
 
 ## Installation
+
+> The installation via homebrew or via the binary is recomeùnded for beginners.
 
 > mkpj is now available on homebrew !
 ### Using homebrew (linux and macos):
