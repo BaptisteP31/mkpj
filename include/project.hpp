@@ -13,7 +13,7 @@ struct Project {
     std::string name;
     std::string target;
     std::string extension;
-    bool is_licenced;
+    bool is_licensed;
     std::string additional_files;
 };
 
@@ -22,7 +22,7 @@ bool create_main(const Project& project);
 bool create_makefile(const Project& project, bool regen=false);
 bool create_config(const Project& project);
 bool create_readme(const Project& project);
-bool get_licence(const Project& project);
+bool get_lisense(const Project& project);
 void create_project();
 void add_cpp_hpp();
 

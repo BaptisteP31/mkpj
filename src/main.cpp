@@ -23,12 +23,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../include/config_reader.hpp"
 #include "../include/project.hpp"
 #include "../include/colors.hpp"
-
 #include "../include/download.hpp"
 
-#include <iostream>
-#include <filesystem>
-#include <fstream>
+#include <bits/stdc++.h>
+
+#define VERSION "0.5"
 
 int main(int argc, char **argv) {
     cxxopts::Options options("mkpj", "MakeProject - A simple project creator");
@@ -37,6 +36,7 @@ int main(int argc, char **argv) {
         ("a,add", "Adds a cpp/hpp file to the project")
         ("m,makefile", "Creates or updates the Makefile")
         ("t,tarball", "Creates a tarball of the project")
+        ("v,version", "Prints the version of mkpj")
         ("h,help", "Print usage")
         ;
 
@@ -46,6 +46,18 @@ int main(int argc, char **argv) {
 
         if (result.count("help")) {
             std::cout << options.help() << std::endl;
+            exit(0);
+        }
+
+        else if (result.count("version")) {
+            std::cout 
+                << "mkpj "<< VERSION << std::endl
+                << "Copyright (C) 2023  Paqueriaud Baptiste" << std::endl
+                << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>." << std::endl
+                << "This is free software; see the source for copying conditions.  There is NO" << std::endl
+                << "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." << std::endl
+                << std::endl
+                << "Written by Paqueriaud Baptiste." << std::endl;
             exit(0);
         }
 
@@ -79,7 +91,7 @@ int main(int argc, char **argv) {
                 exit(1);
             }
 
-            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" + (config.is_licenced ? " LICENCE " : " ") + config.additional_files;
+            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" + (config.is_licensed ? " LICENSE " : " ") + config.additional_files;
             std::cerr << command << std::endl;
             system(command.c_str());
         }

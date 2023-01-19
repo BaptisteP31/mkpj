@@ -109,7 +109,7 @@ bool create_config(const Project& project) {
         << "name = " << project.name << std::endl
         << "target = " << project.target << std::endl
         << "extension = " << project.extension << std::endl
-        << "is_licenced = " << ((project.is_licenced)? "true" : "false") << std::endl
+        << "is_licensed = " << ((project.is_licensed)? "true" : "false") << std::endl
         << "# Additonal files to be added to the tarball" << std::endl
         << "additional_files = " << std::endl;
 
@@ -158,27 +158,27 @@ bool create_readme(const Project& project) {
     return true;
 }
 
-bool get_licence(Project& project) {
-    std::string rep = get_user_input("Would you like to add a licence? [y/n]");
+bool get_license(Project& project) {
+    std::string rep = get_user_input("Would you like to add a license? [y/n]");
 
     const std::string reponses[] = {"y", "Y"};
-    bool no_licence = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;
+    bool no_license = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;
 
-    if (no_licence) {
-        project.is_licenced = false;
+    if (no_license) {
+        project.is_licensed = false;
         return true;
     }
 
-    std::cout << std::endl << "Available licences:" << std::endl;
+    std::cout << std::endl << "Available licenses:" << std::endl;
     std::cout << "1. GPL" << std::endl;
     std::cout << "2. MIT" << std::endl;
     std::cout << "3. Apache" << std::endl;
     std::cout << "4. BSD" << std::endl;
     std::cout << "5. Mozilla" << std::endl << std::endl;
 
-    std::string licence = get_user_input("Licence number:");
+    std::string license = get_user_input("license number:");
 
-    std::map <std::string, std::string> licences = {
+    std::map <std::string, std::string> licenses = {
         {"1", "https://www.gnu.org/licenses/gpl-3.0.txt"},
         {"2", "https://pastebin.com/raw/23YFqm6x"},
         {"3", "https://www.apache.org/licenses/LICENSE-2.0.txt"},
@@ -186,17 +186,17 @@ bool get_licence(Project& project) {
         {"5", "https://www.mozilla.org/media/MPL/2.0/index.815ca599c9df.txt"}
     };
 
-    std::string licence_url = licences[licence];
-    if (licence_url.empty()) {
-        std::cerr << RED << "Error: Licence not found" << RESET << std::endl;
+    std::string license_url = licenses[license];
+    if (license_url.empty()) {
+        std::cerr << RED << "Error: license not found" << RESET << std::endl;
         return false;
     }
 
-    std::cout << YELLOW << "Downloading licence..." << RESET << std::endl;
-    download_from_internet(licence_url, std::filesystem::current_path() / project.name / "LICENCE");
-    std::cout << GREEN << "Licence downloaded" << RESET << std::endl;
+    std::cout << YELLOW << "Downloading license..." << RESET << std::endl;
+    download_from_internet(license_url, std::filesystem::current_path() / project.name / "license");
+    std::cout << GREEN << "license downloaded" << RESET << std::endl;
 
-    project.is_licenced = true;
+    project.is_licensed = true;
     return true;
 }
 
@@ -245,7 +245,7 @@ void create_project() {
         exit(1);
     }
 
-    get_licence(project);
+    get_license(project);
 
     if (!create_readme(project)) {
         std::cerr<< RED << "Error: Could not create README file" << RESET << std::endl;

@@ -40,9 +40,9 @@ bool Config::load() {
         else if (key == "additional_files ")
             this->additional_files = value.empty() ? value : value.substr(1);
         
-        else if (key == "is_licenced ") {
-            if (value == " true") this->is_licenced = true;
-            else if (value == " false") this->is_licenced = false;
+        else if (key == "is_licensed ") {
+            if (value == " true") this->is_licensed = true;
+            else if (value == " false") this->is_licensed = false;
         }
             
     }
