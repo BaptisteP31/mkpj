@@ -83,6 +83,18 @@ You can already use this binary file to execute the program but it is recommande
 <br>
 
 ## Installation
+
+> mkpj is now available on homebrew !
+### Using homebrew (linux and macos):
+```
+$ brew tap BaptisteP31/mkpj
+```
+and then
+```
+$ brew install mkpj
+```
+More info on homebrew [here](https://brew.sh/).
+
 ### From source:  
 On linux, use
 ```
