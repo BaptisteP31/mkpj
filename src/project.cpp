@@ -203,7 +203,7 @@ bool get_license(Project& project) {
 }
 
 void download_pairs(const Project& project) {
-    std::string url = "https://raw.githubusercontent.com/BaptisteP31/mkpj/wip/pairs.conf"; // ! change this when merging to main
+    std::string url = "https://raw.githubusercontent.com/BaptisteP31/mkpj/main/pairs.conf";
     std::string path = std::filesystem::current_path() / project.name / ".pairs.conf";
     download_from_internet(url, path);
 }
