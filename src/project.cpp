@@ -38,6 +38,7 @@ bool create_main(const Project& project) {
     main_file 
         << "// This is the main file of your project" << std::endl << std::endl
         << "int main(int argc, char **argv) {" << std::endl
+        << "    std::cout << \"Hello World!\" << std::endl;" << std::endl
         << "    return 0;" << std::endl
         << "}" << std::endl;
 
