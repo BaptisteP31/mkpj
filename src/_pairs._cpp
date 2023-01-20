@@ -1,0 +1,60 @@
+#include "../include/pairs.hpp"
+#include <fstream>
+#include <sstream>
+
+void read_pair_info(std::filesystem::path &path, Pair &pair) {
+    // Read the pair info from the config file
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        return;
+    }
+    std::string line;
+    while (getline(file, line)) {
+
+        std::stringstream ss(line);
+        std::string key, value;
+
+        getline(ss, key, '=');
+        getline(ss, value, '=');
+
+        if (key == "name ")
+            // Remove the first character (space) if the value is not empty using ternary operator
+            pair.name = value.empty() ? value : value.substr(1);
+        
+        else if (key == "version ")
+            pair.version = value.empty() ? value : value.substr(1);
+        
+        else if (key == "description ")
+            pair.description = value.empty() ? value : value.substr(1);
+        
+        else if (key == "include ")
+            pair.include_url = value.empty() ? value : value.substr(1);
+        
+        else if (key == "source ")
+            pair.source_url = value.empty() ? value : value.substr(1);
+        
+        else if (key == "example ")
+            pair.example_url = value.empty() ? value : value.substr(1);
+        
+        else if (key == "library ")
+            pair.library = value.empty() ? value : value.substr(1);
+    }
+
+    file.close();
+}
+
+void download_pairs(pairs &pairs, std::filesystem::path &path) {
+    // Download all pairs from the github repo
+    std::string command = "git clone https://github.com/BaptisteP31/mkpj-core " + path.string();
+}
+
+void update_pairs(pairs &pairs, std::filesystem::path &path) {
+    // place the pairs in the vector, the pairs are located in the pairs_info folder
+    for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(path)) {
+        
+    }
+}
+
+void Pair::download() {
+    // Download the pair
+}

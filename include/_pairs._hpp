@@ -1,0 +1,27 @@
+// This is used to download hpp/cpp pairs from the internet
+#pragma once
+#ifndef PAIRS_HPP
+#define PAIRS_HPP
+
+#include <string>
+#include <vector>
+#include <filesystem>
+
+class Pair {
+    public:
+        std::string name;
+        std::string version;
+        std::string description;
+        std::string include_url;
+        std::string source_url;
+        std::string example_url;
+        std::string library;
+
+        void download();
+};
+
+using pairs = std::vector<Pair>;
+void download_pairs(pairs &pairs, std::filesystem::path &path);
+void update_pairs(pairs &pairs, std::filesystem::path &path);
+
+#endif
