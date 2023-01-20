@@ -47,6 +47,8 @@ bool Config::load() {
             
     }
 
+    config_file.close();
+
     return true;
 }
 

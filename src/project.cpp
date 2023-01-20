@@ -202,6 +202,12 @@ bool get_license(Project& project) {
     return true;
 }
 
+void download_pairs(const Project& project) {
+    std::string url = "https://raw.githubusercontent.com/BaptisteP31/mkpj/main/pairs.conf";
+    std::string path = std::filesystem::current_path() / project.name / ".pairs.conf";
+    download_from_internet(url, path);
+}
+
 void create_project() {
     Project project;
 
@@ -259,6 +265,8 @@ void create_project() {
         exit(1);
     }
 
+    download_pairs(project);
+
     std::cout << GREEN << "Project created!" << RESET << std::endl;
 }
 
@@ -271,9 +279,14 @@ void add_cpp_hpp() {
         exit(1);
     }
 
-    std::string name = get_user_input("Name of the cpp/hpp couple:");
+    std::string name = get_user_input("Name of the cpp/hpp pair:");
     if (name.empty()) {
         std::cerr << RED << "Error: Name cannot be empty" << RESET << std::endl;
+        exit(1);
+    }
+
+    if (std::filesystem::exists(src_path / (name + ".cpp")) || std::filesystem::exists(inc_path / (name + ".hpp"))) {
+        std::cerr << RED << "Error: File already exists" << RESET << std::endl;
         exit(1);
     }
 
@@ -297,4 +310,5 @@ void add_cpp_hpp() {
     hpp_file.close();
 
     std::cout << GREEN << "Files created!" << RESET << std::endl;
+    std::cout << "You can now include the header file with" << BLUE << " #include \"../include/" << name << ".hpp\"" << RESET << std::endl;
 }
