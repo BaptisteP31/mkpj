@@ -19,9 +19,9 @@ Theses projects follow a simple yet efficient template:
 project_name/
  ├── bin/
  ├── include/
- │   ├── *.hpp
+ │   └── *.hpp
  ├── src/
- │   ├── *.cpp
+ │   └── *.cpp
  ├── obj/
  ├── Makefile
  ├── .mkpj.conf
