@@ -12,7 +12,7 @@
 
 ## What it does ?
 
-`mkpj` is a simple yet very useful program that lets you create projects folder as well as adding hpp/cpp files and download utility [pairs](##pairs).  
+`mkpj` is a simple yet very useful program that lets you create projects folder as well as adding hpp/cpp files and download utility [pairs](##pairs).
 Theses projects follow a simple yet efficient template:
 
 ```
@@ -93,7 +93,7 @@ $ mkpj -l
 To download a pair, use
 ```
 $ mkpj -p <pair_name>
-```
+``` 
 
 <br>
 
