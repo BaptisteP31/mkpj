@@ -12,17 +12,21 @@
 
 ## What it does ?
 
-`mkpj` is a simple yet very useful program that lets you create projects folder.  
+`mkpj` is a simple yet very useful program that lets you create projects folder as well as adding hpp/cpp files and download utility [pairs](##pairs).  
 Theses projects follow a simple yet efficient template:
 
 ```
-ProjectName/
-    |_ bin/
-    |_ include/
-    |_ obj/
-    |_ src/
-    |   |_ main.cpp
-    |_ Makefile
+project_name/
+ ├── bin/
+ ├── include/
+ │   ├── *.hpp
+ ├── src/
+ │   ├── *.cpp
+ ├── obj/
+ ├── Makefile
+ ├── .mkpj.conf
+ ├── .pairs.conf
+ └── README.md
 ```
 
 The `mkpj` programm creates a Makefile based on the inputs you specified.  
@@ -56,12 +60,40 @@ You can add a hpp/cpp combo to your project using
 $ mkpj -a
 ```
 
+You can add a pair to your project using
+```
+$ mkpj -p <pair_name>
+```
+see the [Pairs](##pairs) section for more information.
+
 Finally, you can use
 ```
 $ mkpj -t
 ```
 to export the project to a tarball.
 > You can add additionnal files to the tarball by modifying the `additional_files` property in the `.mkpj.conf` file at the root of your project.
+
+<br>
+
+## Pairs
+> Since version 0.6 mkpj can download pairs of files from the internet.  
+
+The pairs are simple utility classes that can be used in your projects.
+You can find the list of available pairs [here](https://github.com/BaptisteP31/mkpj-core/tree/main/pairs).  
+
+You can add your own pairs by adding them to the `pairs` folder in the `mkpj-core` repository and making a pull request. We will review your pair and add it to the list if it is relevant.
+
+If you want to get more information about the pairs, you can check the [mkpj-core](https://github.com/BaptisteP31/mkpj-core) repository wich contains the pairs as well as a more in depth documentation containing a template for the pairs and a guide on how to create your own pairs.  
+
+To list the available pairs, use
+```
+$ mkpj -l
+```
+
+To download a pair, use
+```
+$ mkpj -p <pair_name>
+```
 
 <br>
 
