@@ -24,6 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../include/project.hpp"
 #include "../include/colors.hpp"
 #include "../include/download.hpp"
+#include "../include/pair.hpp"
 
 #include <bits/stdc++.h>
 
@@ -34,6 +35,8 @@ int main(int argc, char **argv) {
     options.add_options()
         ("c,create", "Creates the project")
         ("a,add", "Adds a cpp/hpp file to the project")
+        ("l,list", "Lists all the available pairs")
+        ("p, pairs", "Adds a pair from the pair list", cxxopts::value<std::string>())
         ("m,makefile", "Creates or updates the Makefile")
         ("t,tarball", "Creates a tarball of the project")
         ("v,version", "Prints the version of mkpj")
@@ -66,6 +69,21 @@ int main(int argc, char **argv) {
             exit(0);
         }
 
+        else if (result.count("add")) {
+            add_cpp_hpp();
+            exit(0);
+        }
+
+        else if (result.count("list")) {
+            collection pairs = get_pairs();
+            display_pairs(pairs);
+        }
+
+        else if (result.count("pairs")) {
+            std::string pair_name = result["pairs"].as<std::string>();
+            download_pair(pair_name);        
+        }
+
         else if (result.count("makefile")) {
             Config config(std::filesystem::current_path() / ".mkpj.conf");
 
@@ -83,8 +101,6 @@ int main(int argc, char **argv) {
         }
 
         else if (result.count("tarball")) {
-            // The tarball contains the project include, src and Makefile
-
             Config config(std::filesystem::current_path() / ".mkpj.conf");
             if (!config.load()) {
                 std::cerr << RED << "Error: Could not load config file" << RESET << std::endl;
