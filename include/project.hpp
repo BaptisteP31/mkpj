@@ -25,7 +25,7 @@ bool create_main(const Project& project);
 bool create_makefile(const Project& project, bool regen=false);
 bool create_config(const Project& project);
 bool create_readme(const Project& project);
-bool get_lisense(const Project& project);
+bool get_lisence(const Project& project);
 void download_pairs(const Project& project);
 void create_project();
 void add_cpp_hpp();
