@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <bits/stdc++.h>
 
-#define VERSION "0.5"
+#define VERSION "0.6"
 
 int main(int argc, char **argv) {
     cxxopts::Options options("mkpj", "MakeProject - A simple project creator");
