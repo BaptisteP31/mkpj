@@ -34,10 +34,12 @@ collection get_pairs() {
         }
 
         else if (key == "include ") {
+            value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
             pairs.back().include = value;
         }
 
         else if (key == "source ") {
+            value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
             pairs.back().source = value;
         }
 
@@ -71,7 +73,7 @@ void download_pair(std::string pair_name) {
         exit(1);
     }
 
-    std::cerr << "Downloading pair " << pair_name << "..." << std::endl;
+    std::cout << "Downloading pair " << pair_name << "..." << std::endl;
 
     if (!std::filesystem::exists("example"))
         std::filesystem::create_directory("example");
@@ -81,9 +83,15 @@ void download_pair(std::string pair_name) {
     for (auto pair : pairs) {
         if (pair.name == pair_name) {
             // if the pair property is none, then we don't need to download anything
-            if (pair.name != "none") download_from_internet(pair.library, std::filesystem::current_path() / "lib" / (pair.name + ".a"));
             if (pair.include != "none") download_from_internet(pair.include, std::filesystem::current_path() / "include" / (pair.name + ".hpp"));
             if (pair.source != "none") download_from_internet(pair.source, std::filesystem::current_path() / "src" / (pair.name + ".cpp"));
+            if (pair.example != "none") download_from_internet(pair.example, std::filesystem::current_path() / "example" / (pair.name + ".cpp"));
+            std::cout << GREEN << "Pair " << pair_name << " downloaded successfully." << RESET << std::endl;
+
+            if (pair.library != "none") {
+                std::cout << YELLOW << "You will need to add the following library (LDLIBS) to your makefile:" << RESET << std::endl;
+                std::cout << YELLOW << "\t" << pair.library << RESET << std::endl;
+            }
             return;
         }
     }
