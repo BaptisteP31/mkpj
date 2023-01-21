@@ -50,7 +50,7 @@ project_name/
  ├── .mkpj.conf
  ├── .pairs.conf
  └── README.md
- │   project_name.pro
+ └──   project_name.pro
  ```
 
 The `mkpj` programm creates a Makefile based on the inputs you specified.  
