@@ -30,6 +30,7 @@ project_name/
  └── README.md
 ```
 
+
 QT project template :
 ```
 project_name/
