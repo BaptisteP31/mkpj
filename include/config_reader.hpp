@@ -17,6 +17,7 @@ struct Config {
     std::string target;
     std::string extension;
     bool is_licensed;
+    bool is_qt;
     std::string additional_files;
 
     bool load();

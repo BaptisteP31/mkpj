@@ -44,6 +44,10 @@ bool Config::load() {
             if (value == " true") this->is_licensed = true;
             else if (value == " false") this->is_licensed = false;
         }
+        else if (key == "is_qt ") {
+            if (value == " true") this->is_qt = true;
+            else if (value == " false") this->is_qt = false;
+        }
             
     }
 

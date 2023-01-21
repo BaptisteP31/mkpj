@@ -25,18 +25,6 @@ bool create_qt_project() {
     return true;
 }
 
-bool create_qt_project() {
-    std::string rep = get_user_input("Would you like to create a QT project? [y/n]");
-
-    const std::string reponses[] = {"y", "Y"};
-    bool no_qt_project = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;
-
-    if (no_qt_project)
-        return false;
-    
-    return true;
-}
-
 bool create_project_directory(const Project& project) {
 
     try {
@@ -138,6 +126,7 @@ bool create_config(const Project& project) {
         << "target = " << project.target << std::endl
         << "extension = " << project.extension << std::endl
         << "is_licensed = " << ((project.is_licensed)? "true" : "false") << std::endl
+        << "is_qt = " << ((project.is_QT)? "true" : "false") << std::endl
         << "# Additonal files to be added to the tarball" << std::endl
         << "additional_files = " << std::endl;
 
@@ -250,9 +239,7 @@ void create_project() {
     } 
 
     project.is_QT = create_qt_project();
-        
-    project.is_QT = create_qt_project();
-        
+
     project.path = std::filesystem::current_path() / project.name;
     if (std::filesystem::exists(project.path)) {
         std::cerr << RED << "Error: Project already exists" << RESET << std::endl;
@@ -290,7 +277,6 @@ void create_project() {
     }
 
     get_license(project);
-    create_qt_files(project);
     create_qt_files(project);
 
     if (!create_readme(project)) {
@@ -350,107 +336,6 @@ void add_cpp_hpp() {
     std::cout << GREEN << "Files created!" << RESET << std::endl;
     std::cout << "You can now include the header file with" << BLUE << " #include \"../include/" << name << ".hpp\"" << RESET << std::endl;
 }
-
-bool create_qt_files(const Project& project) {
-
-    if (!project.is_QT)
-        return false;
-
-    std::filesystem::create_directory(project.name + "/config");
-    std::filesystem::create_directory(project.name + "/resources");
-    std::filesystem::create_directory(project.name + "/interface");
-
-    std::filesystem::path resources_path = project.name + "/resources";
-    std::filesystem::path interface_path = project.name + "/interface";
-    std::filesystem::path conf_path = project.name + "/config";
-
-    std::ofstream qrc_file(resources_path / (project.name + ".qrc"));
-    std::ofstream pro_file(project.name + ("/" + project.name + ".pro"));
-    std::ofstream ui_file(interface_path / "mainwindow.ui");
-    std::ofstream conf_file(conf_path / "conf.json");
-
-    if (!qrc_file.is_open() || !pro_file.is_open() || !ui_file.is_open() || !conf_file.is_open()) {
-        std::cerr << RED << "Error: Could not create QT files" << RESET << std::endl;
-        return false;
-    }
-
-    pro_file 
-            << "# Basic project information" << std::endl
-            << "TEMPLATE = app" << std::endl
-            << "TARGET = " << project.name << std::endl << std::endl
-            << "# Add your source files here" << std::endl
-            << "SOURCES += src/main.cpp" << std::endl << std::endl
-            << "# Add your header files here" << std::endl
-            << "HEADERS += " << std::endl << std::endl
-            << "# Add your resource files here " << std::endl
-            << "RESOURCES += " << "resources/" << project.name << ".qrc" << std::endl << std::endl
-            << "# Add libraries to include here" << std::endl
-            << "LIBS += -lQt5Widgets -lQt5Gui -lQt5Core" << std::endl << std::endl
-            << "# Add any deployment options here" << std::endl
-            << "QMAKE_CXXFLAGS += " << std::endl;
-
-    qrc_file
-            << "<RCC>" << std::endl
-            << "  <qresource prefix=\"/images\">" << std::endl
-            << "    <!-- Add your image files here -->" << std::endl
-            << "  </qresource>" << std::endl
-            << "  <qresource prefix=\"/sounds\">" << std::endl
-            << "    <!-- Add your sound files here -->" << std::endl
-            << "  </qresource>" << std::endl
-            << "</RCC>" << std::endl;
-
-    ui_file
-            << "<ui version=\"4.0\">" << std::endl
-            << " <class>MainWindow</class>" << std::endl
-            << " <widget class=\"QMainWindow\" name=\"MainWindow\">" << std::endl
-            << "  <property name=\"geometry\">" << std::endl
-            << "   <rect>" << std::endl
-            << "    <x>0</x>" << std::endl
-            << "    <y>0</y>" << std::endl
-            << "    <width>800</width>" << std::endl
-            << "    <height>600</height>" << std::endl
-            << "   </rect>" << std::endl
-            << "  </property>" << std::endl
-            << "  <widget class=\"QWidget\" name=\"centralwidget\"/>" << std::endl
-            << "  <widget class=\"QMenuBar\" name=\"menubar\"/>" << std::endl
-            << "  <widget class=\"QStatusBar\" name=\"statusbar\"/>" << std::endl
-            << " </widget>" << std::endl
-            << " <layoutdefault spacing=\"6\" margin=\"11\"/>" << std::endl
-            << " <customwidgets>" << std::endl
-            << "  <customwidget>" << std::endl
-            << " <class>MyCustomWidget</class>" << std::endl
-            << " <extends>QWidget</extends>" << std::endl
-            << " <header>mycustomwidget.h</header>" << std::endl
-            << " </customwidget>" << std::endl
-            << " </customwidgets>" << std::endl
-            << " <resources/>" << std::endl
-            << " <connections/>" << std::endl
-            << "</ui>" << std::endl;
-
-    conf_file
-            << "{" << std::endl
-            << "  \"applicationName\": \"" << project.name << "\"," << std::endl
-            << "  \"version\": \"1.0\"," << std::endl
-            << "  \"author\": \"\"," << std::endl
-            << "  \"settings\": {" << std::endl
-            << "    \"defaultLanguage\": \"en-US\"," << std::endl
-            << "    \"autoSaveInterval\": 5" << std::endl
-            << "  }," << std::endl
-            << "  \"deployment\": {" << std::endl
-            << "    \"targetPlatforms\": [\"Windows\", \"Linux\", \"macOS\"]," << std::endl
-            << "    \"installerType\": \"standalone\"" << std::endl
-            << "  }" << std::endl
-            << "}" << std::endl;
-
-    pro_file.close();
-    qrc_file.close();
-    ui_file.close();
-    conf_file.close();
-
-    std::cout << GREEN << "QT files created!" << RESET << std::endl;
-    return true;
-
-} 
 
 bool create_qt_files(const Project& project) {
 
