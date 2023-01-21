@@ -90,8 +90,8 @@ bool create_makefile(const Project& project, bool regen) {
         << std::endl
         << "all: $(TARGET)" << std::endl
         << std::endl
-        << "$(TARGET): $(OBJ)" << std::endl
-        << "\t$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LDLIBS)" << std::endl
+        << "$(TARGET): configure $(OBJ)" << std::endl
+        << "\t$(CC) $(LDFLAGS) -o bin/$@ $(OBJ) $(LDLIBS)" << std::endl
         << std::endl
         << "obj/%.o: src/%.cpp" << std::endl
         << "\t$(CC) $(CFLAGS) -o $@ -c $<" << std::endl
@@ -103,7 +103,7 @@ bool create_makefile(const Project& project, bool regen) {
         << "\trm -f $(TARGET)" << std::endl
         << std::endl
         << "configure:" << std::endl
-        << "mkdir -p obj && mkdir -p bin" << std::endl;
+        << "\tmkdir -p obj && mkdir -p bin" << std::endl;
 
     makefile.close();
 
