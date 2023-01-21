@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
                 << "This is free software; see the source for copying conditions.  There is NO" << std::endl
                 << "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." << std::endl
                 << std::endl
-                << "Written by Paqueriaud Baptiste." << std::endl;
+                << "Written by Paqueriaud Baptiste and Nini Rabah." << std::endl;
             exit(0);
         }
 
