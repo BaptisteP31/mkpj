@@ -24,20 +24,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../include/project.hpp"
 #include "../include/colors.hpp"
 #include "../include/download.hpp"
+#include "../include/pair.hpp"
 
 #include <bits/stdc++.h>
 
-#define VERSION "0.5"
+#define VERSION "0.6"
 
 int main(int argc, char **argv) {
     cxxopts::Options options("mkpj", "MakeProject - A simple project creator");
     options.add_options()
         ("c,create", "Creates the project")
         ("a,add", "Adds a cpp/hpp file to the project")
+        ("l,list", "Lists all the available pairs")
+        ("u,update", "Updates the pair list")
+        ("p, pairs", "Adds a pair from the pair list", cxxopts::value<std::string>())
         ("m,makefile", "Creates or updates the Makefile")
         ("t,tarball", "Creates a tarball of the project")
         ("v,version", "Prints the version of mkpj")
-        ("l,languages", "Prints all the languages supported by mkpj")
         ("h,help", "Print usage")
         ;
 
@@ -48,15 +51,6 @@ int main(int argc, char **argv) {
         if (result.count("help")) {
             std::cout << options.help() << std::endl;
             exit(0);
-        }
-
-        else if (result.count("languages")) {
-            std::cout
-                << "Available languages : " << std::endl
-                << BLUE << "• C++" << std::endl
-                        << "• C++ (QT)" << std::endl
-                << RESET <<
-            std::endl;
         }
 
         else if (result.count("version")) {
@@ -76,11 +70,36 @@ int main(int argc, char **argv) {
             exit(0);
         }
 
+        else if (result.count("add")) {
+            add_cpp_hpp();
+            exit(0);
+        }
+
+        else if (result.count("list")) {
+            collection pairs = get_pairs();
+            display_pairs(pairs);
+        }
+
+        else if (result.count("update")) {
+            Config config(std::filesystem::current_path() / ".mkpj.conf");
+            if (!config.load()) {
+                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
+                exit(1);
+            }
+            update_pairs(config.get_project_info());
+            std::cout << GREEN << "Pairs updated" << RESET << std::endl;
+        }
+
+        else if (result.count("pairs")) {
+            std::string pair_name = result["pairs"].as<std::string>();
+            download_pair(pair_name);        
+        }
+
         else if (result.count("makefile")) {
             Config config(std::filesystem::current_path() / ".mkpj.conf");
 
             if (!config.load()) {
-                std::cerr << RED << "Error: Could not load config file" << RESET << std::endl;
+                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
 
@@ -93,11 +112,9 @@ int main(int argc, char **argv) {
         }
 
         else if (result.count("tarball")) {
-            // The tarball contains the project include, src and Makefile
-
             Config config(std::filesystem::current_path() / ".mkpj.conf");
             if (!config.load()) {
-                std::cerr << RED << "Error: Could not load config file" << RESET << std::endl;
+                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
 
