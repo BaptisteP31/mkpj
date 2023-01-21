@@ -17,7 +17,7 @@ fi
 
 # Check if the user is root
 if [ "$EUID" -ne 0 ]; then
-    sudo $(curl -s https://raw.githubusercontent.com/BaptisteP31/mkpj/main/install.sh)
+    sudo $(curl -s https://raw.githubusercontent.com/BaptisteP31/mkpj/testing/install.sh)
     exit
 fi
 
