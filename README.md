@@ -13,6 +13,7 @@
 ## What it does ?
 
 `mkpj` is a simple yet very useful program that lets you create projects folder as well as adding hpp/cpp files and download utility [pairs](##pairs).
+It can also create QT projects : adding the resources, interface, and config folders who contains a .json config file, a .ui file, a .qrc file, and it adds a .pro file to the root of the folder.
 Theses projects follow a simple yet efficient template:
 
 ```
@@ -29,6 +30,29 @@ project_name/
  └── README.md
 ```
 
+
+QT project template :
+```
+project_name/
+ ├── bin/
+ ├── config/
+ │   └── conf.json
+ ├── interface/
+ │   └── *.ui
+ ├── resources/
+ │   └── *.qrc
+ ├── include/
+ │   └── *.hpp
+ ├── src/
+ │   └── *.cpp
+ ├── obj/
+ ├── Makefile
+ ├── .mkpj.conf
+ ├── .pairs.conf
+ ├── project_name.pro
+ └── README.md
+ ```
+
 The `mkpj` programm creates a Makefile based on the inputs you specified.  
 The Makefile includes the `all`, `install` and `clean` targets. (The `install` target shall be run as root).
 
@@ -40,6 +64,7 @@ By default, make will put the object files (.o) in the `obj` folder and output t
 
 To create a project, `mkpj` will ask you several questions such as
 - The project name
+- If it is a QT project
 - The target (the ouput from the Makefile)
 - The output file extension 
 
@@ -65,6 +90,11 @@ You can add a pair to your project using
 $ mkpj -p <pair_name>
 ```
 see the [Pairs](##pairs) section for more information.
+
+You can see the languages that can be created with mkpj, by typing
+```
+$ mkpj -g
+```
 
 Finally, you can use
 ```
