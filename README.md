@@ -103,6 +103,7 @@ $ mkpj -t
 to export the project to a tarball.
 > You can add additionnal files to the tarball by modifying the `additional_files` property in the `.mkpj.conf` file at the root of your project.
 
+
 <br>
 
 ## Pairs
@@ -124,6 +125,7 @@ To download a pair, use
 ```
 $ mkpj -p <pair_name>
 ``` 
+-
 <br>
 
 ## Compilation
