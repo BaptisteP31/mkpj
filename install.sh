@@ -17,7 +17,7 @@ fi
 
 # Check if the user is root
 if [ "$EUID" -ne 0 ]; then
-    sudo $0 $@
+    sudo $(curl -s https://raw.githubusercontent.com/BaptisteP31/mkpj/main/install.sh)
     exit
 fi
 
@@ -27,7 +27,7 @@ LATEST_RELEASE=$(curl -s https://api.github.com/repos/BaptisteP31/mkpj/releases 
 echo "Installing mkpj $LATEST_RELEASE, please wait..."
 
 # Download the binary from the latest release
-wget https://github.com/BaptisteP31/mkpj/releases/download/$LATEST_RELEASE/mkpj -O /usr/local/bin/mkpj &> /dev/null
+wget https://github.com/BaptisteP31/mkpj/releases/download/$LATEST_RELEASE/mkpj -O /usr/local/bin/mkpj
 
 # Make the binary executable
 chmod +x /usr/local/bin/mkpj
