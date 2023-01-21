@@ -49,8 +49,8 @@ project_name/
  ├── Makefile
  ├── .mkpj.conf
  ├── .pairs.conf
+ ├── project_name.pro
  └── README.md
- └──   project_name.pro
  ```
 
 The `mkpj` programm creates a Makefile based on the inputs you specified.  
