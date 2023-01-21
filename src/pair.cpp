@@ -87,6 +87,8 @@ void download_pair(std::string pair_name) {
             if (pair.source != "none") download_from_internet(pair.source, std::filesystem::current_path() / "src" / (pair.name + ".cpp"));
             if (pair.example != "none") download_from_internet(pair.example, std::filesystem::current_path() / "example" / (pair.name + ".cpp"));
             std::cout << GREEN << "Pair " << pair_name << " downloaded successfully." << RESET << std::endl;
+            std::cout << "To use " << pair.name << ", add the following line to the top of your source file:" << std::endl;
+            std::cout << YELLOW << "\t#include \"../include/" << pair.name << ".hpp\"" << RESET << std::endl;
 
             if (pair.library != "none") {
                 std::cout << YELLOW << "You will need to add the following library (LDLIBS) to your makefile:" << RESET << std::endl;
