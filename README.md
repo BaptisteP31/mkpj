@@ -152,9 +152,20 @@ You can already use this binary file to execute the program but it is recommande
 
 ## Installation
 
-> The installation via homebrew or via the binary is recomeùnded for beginners.
+> The installation the install script is recomended for beginners.
+
+### The simple way, using the install script via curl:
+```bash
+sudo /bin/bash -c "$(curl -fsSL "https://raw.githubusercontent.com/BaptisteP31/mkpj/main/install.sh")"
+```
+Note that the install script will install the program in the `/usr/local/bin` folder.
+
+<br>
 
 > mkpj is now available on homebrew !
+
+The main benefit of using homebrew is that it will automatically update the program when a new release is available.
+
 ### Using homebrew (linux and macos):
 ```
 $ brew tap BaptisteP31/mkpj
