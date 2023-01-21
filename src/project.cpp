@@ -221,6 +221,12 @@ void download_pairs(const Project& project) {
     download_from_internet(url, path);
 }
 
+void update_pairs(const Project& project) {
+    std::string url = "https://raw.githubusercontent.com/BaptisteP31/mkpj/main/pairs.conf";
+    std::string path = std::filesystem::current_path() / ".pairs.conf";
+    download_from_internet(url, path);
+}
+
 void create_project() {
     Project project;
 

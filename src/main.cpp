@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
         ("c,create", "Creates the project")
         ("a,add", "Adds a cpp/hpp file to the project")
         ("l,list", "Lists all the available pairs")
+        ("u,update", "Updates the pair list")
         ("p, pairs", "Adds a pair from the pair list", cxxopts::value<std::string>())
         ("m,makefile", "Creates or updates the Makefile")
         ("t,tarball", "Creates a tarball of the project")
@@ -89,6 +90,16 @@ int main(int argc, char **argv) {
             display_pairs(pairs);
         }
 
+        else if (result.count("update")) {
+            Config config(std::filesystem::current_path() / ".mkpj.conf");
+            if (!config.load()) {
+                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
+                exit(1);
+            }
+            update_pairs(config.get_project_info());
+            std::cout << GREEN << "Pairs updated" << RESET << std::endl;
+        }
+
         else if (result.count("pairs")) {
             std::string pair_name = result["pairs"].as<std::string>();
             download_pair(pair_name);        
@@ -98,7 +109,7 @@ int main(int argc, char **argv) {
             Config config(std::filesystem::current_path() / ".mkpj.conf");
 
             if (!config.load()) {
-                std::cerr << RED << "Error: Could not load config file" << RESET << std::endl;
+                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
 
@@ -113,7 +124,7 @@ int main(int argc, char **argv) {
         else if (result.count("tarball")) {
             Config config(std::filesystem::current_path() / ".mkpj.conf");
             if (!config.load()) {
-                std::cerr << RED << "Error: Could not load config file" << RESET << std::endl;
+                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
 
