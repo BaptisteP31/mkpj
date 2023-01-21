@@ -36,11 +36,11 @@ QT project template :
 project_name/
  ├── bin/
  ├── config/
-     └── conf.json
+ │   └── conf.json
  ├── interface/
-     └── *.ui
+ │   └── *.ui
  ├── resources/
-     └── *.qrc
+ │   └── *.qrc
  ├── include/
  │   └── *.hpp
  ├── src/
