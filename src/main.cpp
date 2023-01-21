@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
         ("m,makefile", "Creates or updates the Makefile")
         ("t,tarball", "Creates a tarball of the project")
         ("v,version", "Prints the version of mkpj")
+        ("g,languages", "Prints all the languages supported by mkpj")
         ("h,help", "Print usage")
         ;
 
@@ -51,6 +52,15 @@ int main(int argc, char **argv) {
         if (result.count("help")) {
             std::cout << options.help() << std::endl;
             exit(0);
+        }
+
+        else if (result.count("languages")) {
+            std::cout
+                << "Available languages : " << std::endl
+                << BLUE << "\t• C++" << std::endl
+                        << "\t• C++ (QT)" << std::endl
+                << RESET <<
+            std::endl;
         }
 
         else if (result.count("version")) {
