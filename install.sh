@@ -15,10 +15,10 @@ if ! [ -x "$(command -v wget)" ]; then
     exit 1
 fi
 
-# Check if the user is root
-if [ "$EUID" -ne 0 ]; then
-    sudo $(/bin/bash -c $(curl https://raw.githubusercontent.com/BaptisteP31/mkpj/testing/install.sh))
-    exit
+# Check if the user is root, this part is complicated because the script is downloaded with curl
+if [ "$(id -u)" != "0" ]; then
+    echo "Error: You must be root to run this script." >&2
+    exit 1
 fi
 
 # Get the latest release
@@ -27,7 +27,7 @@ LATEST_RELEASE=$(curl -s https://api.github.com/repos/BaptisteP31/mkpj/releases 
 echo "Installing mkpj $LATEST_RELEASE, please wait..."
 
 # Download the binary from the latest release
-wget https://github.com/BaptisteP31/mkpj/releases/download/$LATEST_RELEASE/mkpj -O /usr/local/bin/mkpj
+wget https://github.com/BaptisteP31/mkpj/releases/download/$LATEST_RELEASE/mkpj -O /usr/local/bin/mkpj &> /dev/null
 
 # Make the binary executable
 chmod +x /usr/local/bin/mkpj
