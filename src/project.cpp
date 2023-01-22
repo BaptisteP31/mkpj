@@ -111,9 +111,7 @@ bool create_makefile(const Project& project, bool regen) {
 }
 
 bool create_config(const Project& project) {
-    Config config(std::filesystem::current_path() / project.name / ".mkpj.conf");
-
-    std::ofstream config_file(config.path);
+    std::ofstream config_file(project.path / ".mkpj.conf");
 
     if (!config_file.is_open())
         return false;
@@ -209,7 +207,7 @@ bool get_license(Project& project) {
     }
 
     std::cout << YELLOW << "Downloading license..." << RESET << std::endl;
-    download_from_internet(license_url, std::filesystem::current_path() / project.name / "license");
+    download_from_internet(license_url, std::filesystem::current_path() / project.name / "LICENSE");
     std::cout << GREEN << "license downloaded" << RESET << std::endl;
 
     project.is_licensed = true;
@@ -222,7 +220,7 @@ void download_pairs(const Project& project) {
     download_from_internet(url, path);
 }
 
-void update_pairs(const Project& project) {
+void update_pairs() {
     std::string url = "https://raw.githubusercontent.com/BaptisteP31/mkpj/main/pairs.conf";
     std::string path = std::filesystem::current_path() / ".pairs.conf";
     download_from_internet(url, path);
@@ -262,6 +260,9 @@ void create_project() {
         }
         project.target = tokens[0];
         project.extension = tokens[1];
+    }
+    else {
+        project.target = temp_target;
     }
 
     if (project.extension.empty())
