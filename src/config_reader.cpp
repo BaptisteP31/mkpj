@@ -45,7 +45,6 @@ bool Config::load() {
         
         else if (key == "is_qt ") 
             value == " true" ? this->is_qt = true : this->is_qt = false;
-        
             
     }
 
