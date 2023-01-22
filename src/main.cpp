@@ -54,6 +54,18 @@ int main(int argc, char **argv) {
             exit(0);
         }
 
+        else if (result.count("debug")) {
+            config::ConfigFile config;
+            config.load_from_file(".mkpj.conf");
+            auto configs = config.to_vector();
+            for (auto config : configs) {
+                std::cout << config.first << std::endl;
+                for (auto key_value : config.second) {
+                    std::cout << "\t" << key_value.first << " : " << key_value.second << std::endl;
+                }
+            }
+        }
+
         else if (result.count("languages")) {
             std::cout
                 << "Available languages : " << std::endl
@@ -91,12 +103,13 @@ int main(int argc, char **argv) {
         }
 
         else if (result.count("update")) {
-            Config config(std::filesystem::current_path() / ".mkpj.conf");
-            if (!config.load()) {
+            config::ConfigFile config;
+            config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
+            if (!config.is_loaded()) {
                 std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
-            update_pairs(config.get_project_info());
+            update_pairs();
             std::cout << GREEN << "Pairs updated" << RESET << std::endl;
         }
 
@@ -106,9 +119,10 @@ int main(int argc, char **argv) {
         }
 
         else if (result.count("makefile")) {
-            Config config(std::filesystem::current_path() / ".mkpj.conf");
+            config::ConfigFile config;
+            config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
 
-            if (!config.load()) {
+            if (!config.is_loaded()) {
                 std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
@@ -122,13 +136,21 @@ int main(int argc, char **argv) {
         }
 
         else if (result.count("tarball")) {
-            Config config(std::filesystem::current_path() / ".mkpj.conf");
-            if (!config.load()) {
+            config::ConfigFile config;
+            config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
+            if (!config.is_loaded()) {
                 std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
                 exit(1);
             }
 
-            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" + (config.is_licensed ? " LICENSE " : " ") + (config.is_qt ? ("resources/ interface/ config/ " + config.name + ".pro ") : "") + config.additional_files;
+            Project project = config.get_project_info();
+
+            std::string command = "tar -czf " 
+                + project.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" 
+                + (project.is_licensed ? " LICENSE " : " ") 
+                + (project.is_QT ? ("resources/ interface/ config/ " + project.name + ".pro ") : "") 
+                + project.additional_files;
+            
             std::cerr << command << std::endl;
             system(command.c_str());
         }

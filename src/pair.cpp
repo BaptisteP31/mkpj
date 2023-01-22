@@ -1,59 +1,29 @@
 #include "../include/pair.hpp"
 #include "../include/colors.hpp"
+#include "../include/config_reader.hpp"
 
 collection get_pairs() {
-    collection pairs;
-    std::ifstream file(PAIR_FILE);
+    collection pairs_collection;
+    config::ConfigFile config;
+    config.load_from_file(PAIR_FILE);
 
-    if (!file.is_open()) {
-        std::cerr << RED << "Error: Could not open " << PAIR_FILE << RESET << std::endl;
-        exit(1);
+    std::vector<std::string> pairs = config.list_configs();
+
+    for (auto pair : pairs) {
+        Pair p;
+        std::map<std::string, std::string> pair_config = config.to_map(pair);
+        
+        p.name = pair;
+        p.version = pair_config["version"];
+        p.description = pair_config["description"];
+        p.include = pair_config["include"];
+        p.source = pair_config["source"];
+        p.example = pair_config["example"];
+        p.library = pair_config["library"];
+
+        pairs_collection.push_back(p);
     }
-    std::string line;
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string key, value;
-        std::getline(ss, key, '=');
-        std::getline(ss, value, '=');
-
-        if (!value.empty() && value[0] == ' ') {
-            value.erase(0, 1);
-        }
-
-        if (key == "name ") {
-            pairs.push_back(Pair());
-            pairs.back().name = value;
-        }
-
-        else if (key == "version ") {
-            pairs.back().version = value;
-        }
-
-        else if (key == "description ") {
-            pairs.back().description = value;
-        }
-
-        else if (key == "include ") {
-            value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
-            pairs.back().include = value;
-        }
-
-        else if (key == "source ") {
-            value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
-            pairs.back().source = value;
-        }
-
-        else if (key == "example ") {
-            pairs.back().example = value;
-        }
-
-        else if (key == "library ") {
-            pairs.back().library = value;
-        }
-
-    }
-
-    return pairs;
+    return pairs_collection;
 }
 
 void display_pairs(collection pairs) {
