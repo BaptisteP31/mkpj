@@ -125,6 +125,7 @@ bool create_config(const Project& project) {
         << "target = " << project.target << std::endl
         << "extension = " << project.extension << std::endl
         << "is_licensed = " << ((project.is_licensed)? "true" : "false") << std::endl
+        << "is_qt = " << ((project.is_QT)? "true" : "false") << std::endl
         << "# Additonal files to be added to the tarball" << std::endl
         << "additional_files = " << std::endl;
 
@@ -237,7 +238,7 @@ void create_project() {
     } 
 
     project.is_QT = create_qt_project();
-        
+
     project.path = std::filesystem::current_path() / project.name;
     if (std::filesystem::exists(project.path)) {
         std::cerr << RED << "Error: Project already exists" << RESET << std::endl;

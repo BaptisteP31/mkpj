@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
                 exit(1);
             }
 
-            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" + (config.is_licensed ? " LICENSE " : " ") + config.additional_files;
+            std::string command = "tar -czf " + config.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" + (config.is_licensed ? " LICENSE " : " ") + (config.is_qt ? ("resources/ interface/ config/ " + config.name + ".pro ") : "") + config.additional_files;
             std::cerr << command << std::endl;
             system(command.c_str());
         }
