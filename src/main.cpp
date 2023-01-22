@@ -42,7 +42,6 @@ int main(int argc, char **argv) {
         ("t,tarball", "Creates a tarball of the project")
         ("v,version", "Prints the version of mkpj")
         ("g,languages", "Prints all the languages supported by mkpj")
-        ("debug", "Prints the config file")
         ("h,help", "Print usage")
         ;
 
