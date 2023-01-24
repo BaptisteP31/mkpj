@@ -47,8 +47,7 @@ bool create_main(const Project& project) {
     if (!main_file.is_open())
         return false;
 
-    main_file 
-        << "#include <iostream>" << std::endl << std::endl
+    main_file
         << "// This is the main file of your project" << std::endl << std::endl
         << "#include <iostream>" << std::endl << std::endl
         << "int main(int argc, char **argv) {" << std::endl
