@@ -14,7 +14,7 @@ std::string get_user_input(std::string message) {
 }
 
 bool create_qt_project() {
-    std::string rep = get_user_input("Would you like to create a QT project? [y/n]");
+    std::string rep = get_user_input("Would you like to create a QT project? [y/N]");
 
     const std::string reponses[] = {"y", "Y"};
     bool no_qt_project = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;
@@ -172,7 +172,7 @@ bool create_readme(const Project& project) {
 }
 
 bool get_license(Project& project) {
-    std::string rep = get_user_input("Would you like to add a license? [y/n]");
+    std::string rep = get_user_input("Would you like to add a license? [y/N]");
 
     const std::string reponses[] = {"y", "Y"};
     bool no_license = rep.find(reponses[0]) == std::string::npos && rep.find(reponses[1]) == std::string::npos;

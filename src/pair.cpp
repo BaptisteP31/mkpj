@@ -43,7 +43,6 @@ void download_pair(std::string pair_name) {
         exit(1);
     }
 
-    std::cout << "Downloading pair " << pair_name << "..." << std::endl;
 
     if (!std::filesystem::exists("example"))
         std::filesystem::create_directory("example");
@@ -52,6 +51,7 @@ void download_pair(std::string pair_name) {
 
     for (auto pair : pairs) {
         if (pair.name == pair_name) {
+            std::cout << "Downloading pair " << pair_name << "..." << std::endl;
             // if the pair property is none, then we don't need to download anything
             if (pair.include != "none") download_from_internet(pair.include, std::filesystem::current_path() / "include" / (pair.name + ".hpp"));
             if (pair.source != "none") download_from_internet(pair.source, std::filesystem::current_path() / "src" / (pair.name + ".cpp"));
