@@ -20,8 +20,8 @@ struct Pair {
 
 using collection = std::vector<Pair>;
 
-collection get_pairs();
-void display_pairs(collection pairs);
-void download_pair(std::string pair_name);
+collection      get_pairs       ();
+void            display_pairs   (collection pairs);
+void            download_pair   (std::string pair_name);
 
 #endif

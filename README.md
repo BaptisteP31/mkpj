@@ -179,7 +179,7 @@ More info on homebrew [here](https://brew.sh/).
 ### From source:  
 On linux, use
 ```
-# sudo make install
+# make install
 ```
 to install the program in the `/usr/local/bin` folder.
 

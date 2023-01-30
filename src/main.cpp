@@ -27,6 +27,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <bits/stdc++.h>
 #include <ncurses.h>
+#include <array>
 
 #define VERSION "0.6"
 
@@ -85,34 +86,21 @@ void ncurses_menu(char **argv) {
     // There is a list of choices and the user can navigate up and down and make a choice by pressing enter.
     // The program will print the choice and exit.
 
-    // printed in the color blue
-    attron(COLOR_PAIR(1));
     mvprintw(3, 0, "Choose an option:");
-    attroff(COLOR_PAIR(1));
     std::vector<std::string> choices;
 
     // If the user is not in a project directory, all he can do is create a project, see the version and help and exit.
     if (!std::filesystem::exists(".mkpj.conf")) {
-        choices.push_back("Create a project");
-        choices.push_back("See the version");
-        choices.push_back("See the help");
-        choices.push_back("Exit");
+        std::array<std::string, 4> str_choices = {"Create a project", "See the version", "See the help", "Exit"};
+        for (auto choice : str_choices)
+            choices.push_back(choice);
     }
-
     // If the user is in a project directory, he can add a cpp/hpp file, add a pair from the pair list and list the pairs, regen the makefile and expoa the project and exit.
     else {
-        choices.push_back("Add a cpp/hpp file");
-        choices.push_back("Add a pair from the pair list");
-        choices.push_back("List all the available pairs");
-        choices.push_back("Regen the makefile");
-        choices.push_back("Export the project (tar.gz)");
-        choices.push_back("Exit");
+        const std::array<std::string, 6> str_choices = {"Add a cpp/hpp file", "Add a pair from the pair list", "List all the available pairs", "Regen the makefile", "Export the project (tar.gz)", "Exit"};
+        for (auto choice : str_choices)
+            choices.push_back(choice);
     }
-
-    //choices.push_back("Create a project");
-    //choices.push_back("Add a cpp/hpp file");
-    //choices.push_back("Add a pair from the pair list");
-    //choices.push_back("List all the available pairs");
 
     int     highlight = 0;
     int     choice = 0;
@@ -167,7 +155,6 @@ void ncurses_menu(char **argv) {
 
     // The program will call the function corresponding to the choice.
     std::string pair = "";
-    
     collection pairs;
 
     // If the user is not in a project directory, all he can do is create a project, see the version and help and exit.

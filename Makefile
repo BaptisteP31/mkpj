@@ -25,4 +25,4 @@ configure:
 	mkdir -p obj && mkdir -p bin
 
 install: configure all
-	cp $(BIN)/$(TARGET) /usr/local/bin
+	sudo cp $(BIN)/$(TARGET) /usr/local/bin
