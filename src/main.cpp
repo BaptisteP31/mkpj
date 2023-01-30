@@ -23,7 +23,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "../include/config_reader.hpp"
 #include "../include/project.hpp"
 #include "../include/colors.hpp"
-#include "../include/download.hpp"
 #include "../include/pair.hpp"
 
 #include <bits/stdc++.h>
