@@ -21,35 +21,20 @@ std::vector<std::string> split(std::string str, char delimiter) {
 
 namespace config {
     
-        /// @brief Construct a new Config:: Config object
-        ConfigFile::ConfigFile() {
-            this->configs = {};
-            this->loaded = false;
-            this->empty = true;
-        }
-
-        /// @brief Cheks if the config file is empty
-        /// @return true if the config file is empty, false otherwise
-        bool ConfigFile::is_empty() {
-            return this->configs.empty();
-        }
-
-        /// @brief Check if the config file is open
-        /// @return true if the config file is open, false otherwise
-        bool ConfigFile::is_loaded() {
-            return this->loaded;
-        }
+        /// @brief Construct a new Config object
+        ConfigFile::ConfigFile() 
+                  : loaded(false), empty(true), configs({}) {}
 
         /// @brief Load the config file and parse it, the config file must be in the following format: key = value and comments must be preceded by a #
         /// @param path The path to the config file
         void ConfigFile::load_from_file(fs::path path) {
             if (!fs::exists(path)) {
-                this->loaded = false;
+                loaded = false;
                 return;
             }
 
-            this->file.open(path, std::ios::in);
-            this->loaded = file.is_open();
+            file.open(path, std::ios::in);
+            loaded = file.is_open();
 
             std::string line;
             std::string name = "default";
@@ -82,25 +67,19 @@ namespace config {
                     continue;
 
                 // If there is no config, we create a default one
-                if (this->configs.empty())
-                    this->configs.push_back({"default", {}});
+                if (configs.empty())
+                    configs.push_back({"default", {}});
 
                 // Search for the key in the config and if it's found, we skip it, we don't want to add the same key twice otherwise the will shadow the previous one
-                if (std::find_if(this->configs.back().second.begin(), this->configs.back().second.end(), [&keyValue](key_value kv) { return kv.first == keyValue[0]; }) != this->configs.back().second.end())
+                if (std::find_if(configs.back().second.begin(), configs.back().second.end(), [&keyValue](key_value kv) { return kv.first == keyValue[0]; }) != configs.back().second.end())
                     continue;
 
 
 
                 // Add the key-value pair to the config
-                this->configs.back().second.push_back({keyValue[0], keyValue[1]});
+                configs.back().second.push_back({keyValue[0], keyValue[1]});
             }
             file.close();
-        }
-
-        /// @brief Convert the config file to a vector of key-value pairs
-        /// @return A vector of pairs {config_name, vector of pairs {key, value}
-        Configs ConfigFile::to_vector() {
-            return this->configs;
         }
 
         /// @brief Convert a given config to a map
@@ -109,7 +88,7 @@ namespace config {
         std::map<std::string, std::string> ConfigFile::to_map(const std::string config_name) {
             std::map<std::string, std::string> map;
             bool found_default = false;
-            for (auto config : this->configs) {
+            for (auto config : configs) {
                 if (config.first == config_name) {
                     found_default = true;
                     for (auto kv : config.second) {
@@ -140,18 +119,18 @@ namespace config {
         Project ConfigFile::get_project_info() {
             Project project;
 
-            if (this->configs.empty())
+            if (configs.empty())
                 return project;
 
-            std::map<std::string, std::string> map = this->to_map();
+            std::map<std::string, std::string> map = to_map();
 
-            project.name = map["name"];
-            project.target = map["target"];
-            project.extension = map["extension"];
-            project.is_licensed = (map["is_licensed"] == "true") || (map["is_licensed"] == "True") || (map["is_licensed"] == "TRUE");
-            project.is_licensed = (map["is_licensed"] == "true") || (map["is_licensed"] == "True") || (map["is_licensed"] == "TRUE");
-            project.is_QT = (map["is_qt"] == "true") || (map["is_qt"] == "True") || (map["is_qt"] == "TRUE");
-            project.additional_files = map["additional_files"];
+            project.name             =  map["name"];
+            project.target           =  map["target"];
+            project.extension        =  map["extension"];
+            project.is_licensed      = (map["is_licensed"] == "true") || (map["is_licensed"] == "True") || (map["is_licensed"] == "TRUE");
+            project.is_licensed      = (map["is_licensed"] == "true") || (map["is_licensed"] == "True") || (map["is_licensed"] == "TRUE");
+            project.is_QT            = (map["is_qt"] == "true") || (map["is_qt"] == "True") || (map["is_qt"] == "TRUE");
+            project.additional_files =  map["additional_files"];
 
             
             return project;

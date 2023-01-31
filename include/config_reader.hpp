@@ -22,14 +22,17 @@ namespace config {
         public:
             ConfigFile();
             
-            void                                load_from_file(fs::path);
-            Configs                             to_vector();
-            std::map<std::string, std::string>  to_map(const std::string config_name = "default");
-            bool                                is_empty();
-            bool                                is_loaded();
-            std::vector<std::string>            list_configs();
+            void                                load_from_file      (fs::path);
+            Project                             get_project_info    ();
+            std::vector<std::string>            list_configs        ();
+            
+            inline Configs                      to_vector           () const { return configs; };
+            std::map<std::string, std::string>  to_map              (const std::string config_name = "default");
+            
+            inline bool                         is_empty            () const { return empty;};
+            
+            inline bool                         is_loaded           () const { return loaded;};
 
-            Project                             get_project_info();
     };
 
 }
