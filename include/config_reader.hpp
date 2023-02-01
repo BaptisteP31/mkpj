@@ -14,10 +14,11 @@ namespace config {
     using ConfigMap         = std::map      <std::string, std::string>;
 
     class ConfigFile {
-        Configs         configs;
-        bool            loaded = false;
-        bool            empty = true;
-        std::fstream    file;
+        private:
+            Configs         configs;
+            bool            loaded = false;
+            bool            empty = true;
+            std::fstream    file;
 
         public:
             ConfigFile();
@@ -32,7 +33,6 @@ namespace config {
             inline bool                         is_empty            () const { return empty;};
             
             inline bool                         is_loaded           () const { return loaded;};
-
     };
 
 }

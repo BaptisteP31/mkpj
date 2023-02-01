@@ -79,6 +79,9 @@ namespace config {
                 // Add the key-value pair to the config
                 configs.back().second.push_back({keyValue[0], keyValue[1]});
             }
+            if (!configs.empty())
+                empty = false;
+                
             file.close();
         }
 
