@@ -136,7 +136,7 @@ You can already use this binary file to execute the program but it is recommande
 
 ### The simple way, using the install script via curl:
 ```bash
-/bin/bash -c "$(curl -fsSL "https://raw.githubusercontent.com/BaptisteP31/mkpj/experiment/install.sh")"
+sudo /bin/bash -c "$(curl -fsSL "https://raw.githubusercontent.com/BaptisteP31/mkpj/main/install.sh")"
 ```
 Note that the install script will install the program in the `/usr/local/bin` folder.
 

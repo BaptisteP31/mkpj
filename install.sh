@@ -16,10 +16,10 @@ if ! [ -x "$(command -v wget)" ]; then
 fi
 
 # Check if the user is root, this part is complicated because the script is downloaded with curl
-# if [ "$(id -u)" != "0" ]; then
-#    echo "Error: You must be root to run this script." >&2
-#    exit 1
-# fi
+if [ "$(id -u)" != "0" ]; then
+    echo "Error: You must be root to run this script." >&2
+    exit 1
+fi
 
 # Get the latest release
 LATEST_RELEASE=$(curl -s https://api.github.com/repos/BaptisteP31/mkpj/releases | grep "tag_name" | cut -d '"' -f 4 | head -n 1)
