@@ -70,38 +70,17 @@ To create a project, `mkpj` will ask you several questions such as
 
 Just type
 ```
-$ mkpj -c
+$ mkpj
 ```
-to create a new project.
-
-You can also use
-```
-$ mkpj -m
-```
-to re create the Makefile of an existing project, it is useful if you edited the configuration file (`.mkpj.conf` at the root of your project).
-
-You can add a hpp/cpp combo to your project using
-```
-$ mkpj -a
-```
+To open the menu.
+This menu will let you create a project, once in a project, you will be able to add cpp/hpp files, add a pair from the list, you can regenerate the Makefile, and export the project to a tarball.
+> You can add additionnal files to the tarball by modifying the `additional_files` property in the `.mkpj.conf` file at the root of your project.
 
 You can add a pair to your project using
 ```
 $ mkpj -p <pair_name>
 ```
 see the [Pairs](##pairs) section for more information.
-
-You can see the languages that can be created with mkpj, by typing
-```
-$ mkpj -g
-```
-
-Finally, you can use
-```
-$ mkpj -t
-```
-to export the project to a tarball.
-> You can add additionnal files to the tarball by modifying the `additional_files` property in the `.mkpj.conf` file at the root of your project.
 
 <br>
 
@@ -119,6 +98,7 @@ To list the available pairs, use
 ```
 $ mkpj -l
 ```
+or use the menu.
 
 To download a pair, use
 ```
@@ -179,7 +159,7 @@ More info on homebrew [here](https://brew.sh/).
 ### From source:  
 On linux, use
 ```
-# sudo make install
+# make install
 ```
 to install the program in the `/usr/local/bin` folder.
 
