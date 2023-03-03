@@ -16,8 +16,8 @@ namespace config {
     class ConfigFile {
         private:
             Configs         configs;
-            bool            loaded = false;
-            bool            empty = true;
+            bool            loaded;
+            bool            empty;
             std::fstream    file;
 
         public:
