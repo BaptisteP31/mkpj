@@ -109,7 +109,7 @@ void ncurses_menu(char **argv) {
         for(size_t i = 0; i < choices.size(); i++) {
             if(i == size_t(highlight))
                 attron(A_REVERSE);
-            mvprintw(i+4, 1, choices[i].c_str());
+            mvprintw(i+4, 1, choices[i].c_str(), "%s");
             attroff(A_REVERSE);
         }
         c = getch();
@@ -342,6 +342,15 @@ int main(int argc, char **argv) {
     } catch (const cxxopts::OptionException& e) {
         std::cout << options.help() << std::endl;
         exit(0);
+    } catch (const std::runtime_error& e) {
+        std::cerr << RED << e.what() << RESET << std::endl;
+        exit(1);
+    } catch (const std::exception& e) {
+        std::cerr << RED << e.what() << RESET << std::endl;
+        exit(1);
+    } catch (...) {
+        std::cerr << RED << "An unknown error occured" << RESET << std::endl;
+        exit(1);
     }
 
     return 0;
