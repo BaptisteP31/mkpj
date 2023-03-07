@@ -79,7 +79,7 @@ void Project::create_config() {
         << "target = " << target << std::endl
         << "extension = " << extension << std::endl
         << "is_licensed = " << ((is_licensed)? "true" : "false") << std::endl
-        << "# Additonal files to be added to the tarball" << std::endl
+        << "# Additional files to be added to the tarball" << std::endl
         << "additional_files = " << std::endl;
 
     config_file.close();
