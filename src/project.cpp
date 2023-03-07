@@ -126,7 +126,7 @@ void Project::create_makefile(bool regen) {
         << std::endl
         << "all: $(TARGET)" << std::endl
         << std::endl
-        << "$(TARGET): configure $(OBJ)" << std::endl
+        << "$(TARGET): $(OBJ)" << std::endl
         << "\t$(CC) $(LDFLAGS) -o bin/$@ $(OBJ) $(LDLIBS)" << std::endl
         << std::endl
         << "obj/%.o: src/%.cpp" << std::endl
