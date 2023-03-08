@@ -350,7 +350,7 @@ int main(int argc, char **argv) {
         std::cerr << RED << e.what() << RESET << std::endl;
         exit(1);
     } catch (...) {
-        std::cerr << RED << "An unknown error occured" << RESET << std::endl;
+        std::cerr << RED << "An unknown error occurred" << RESET << std::endl;
         exit(1);
     }
 
