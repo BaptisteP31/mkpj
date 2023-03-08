@@ -185,6 +185,8 @@ void ncurses_menu(char **argv) {
     if(std::filesystem::exists(std::filesystem::current_path() / ".mkpj.conf")) {
         collection pairs;
         config::ConfigFile config;
+        config.load_from_file(".mkpj.conf");
+        (config.is_empty() ? throw std::runtime_error("Error: The config file is empty.") : 0);
         Project project = config.get_project_info();
         switch(choice) {
             case 1:
@@ -200,8 +202,7 @@ void ncurses_menu(char **argv) {
                 display_pairs(pairs);
                 break;
             case 4:
-                config.load_from_file(".mkpj.conf");
-                project.create_makefile();
+                project.create_makefile(true);
                 std::cout << GREEN << "The makefile has been regenerated." << RESET << std::endl;
                 break;
             case 5:
