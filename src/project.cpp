@@ -242,6 +242,9 @@ void create_project() {
 
     std::string target = get_user_input("Output file name [default: " + name + "]:");
     std::string extension = "";
+
+    if (target.empty())
+        target = name;
     
     if (target.find(".") == std::string::npos)
         extension = get_user_input("Output file extension [default: none]:");
