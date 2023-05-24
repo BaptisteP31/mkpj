@@ -1,4 +1,5 @@
 #include "../include/config_reader.hpp"
+#include "../include/project.hpp"
 
 #include <fstream>
 #include <map>
@@ -23,7 +24,7 @@ namespace config {
     
         /// @brief Construct a new Config object
         ConfigFile::ConfigFile() 
-                  : loaded(false), empty(true), configs({}) {}
+                  : configs({}), loaded(false), empty(true) {}
 
         /// @brief Load the config file and parse it, the config file must be in the following format: key = value and comments must be preceded by a #
         /// @param path The path to the config file
@@ -127,14 +128,14 @@ namespace config {
 
             std::map<std::string, std::string> map = to_map();
 
-            project.name             =  map["name"];
-            project.target           =  map["target"];
-            project.extension        =  map["extension"];
-            project.is_licensed      = (map["is_licensed"] == "true") || (map["is_licensed"] == "True") || (map["is_licensed"] == "TRUE");
-            project.is_licensed      = (map["is_licensed"] == "true") || (map["is_licensed"] == "True") || (map["is_licensed"] == "TRUE");
-            project.is_QT            = (map["is_qt"] == "true") || (map["is_qt"] == "True") || (map["is_qt"] == "TRUE");
-            project.additional_files =  map["additional_files"];
+            const std::array<std::string, 3> trues = {"true", "True", "TRUE"};
 
+            project.set_name(map["name"]);
+            project.set_target(map["target"]);
+            project.set_extension(map["extension"]);
+            project.set_is_licensed(std::find(trues.begin(), trues.end(), map["is_licensed"]) != trues.end());
+            project.set_additional_files(map["additional_files"]);
+                        
             
             return project;
         }

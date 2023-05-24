@@ -29,34 +29,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <ncurses.h>
 #include <array>
 
-#define VERSION "0.6"
+#define VERSION "0.8"
 
 void tarball_export(std::string project_name) {
     config::ConfigFile config;
     config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
-    if (!config.is_loaded()) {
-        std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
-            exit(1);
-    }
+    if (!config.is_loaded())
+        throw std::runtime_error("Error: Could not load the configuration file, make sure you are in a project directory.");
 
     Project project = config.get_project_info();
 
     std::string command = "tar -czf " 
-        + project.name + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" 
-        + (project.is_licensed ? " LICENSE " : " ") 
-        + (project.is_QT ? ("resources/ interface/ config/ " + project.name + ".pro ") : "") 
-        + project.additional_files;
+        + project.get_name() + ".tar.gz " + "src/ " + "include/ " + "Makefile " + "README.md" 
+        + (project.get_is_licensed() ? " LICENSE " : " ") 
+        + project.get_additional_files();
     
     // std::cerr << command << std::endl;
     // If the last command is successful, the program will print a message and exit.
-    if (system(command.c_str()) == 0) {
-        std::cout << GREEN << "The project has been exported to " << project.name << ".tar.gz" << RESET << std::endl;
-        exit(0);
-    }
-    else {
-        std::cerr << RED << "Error: Could not export the project" << RESET << std::endl;
-        exit(1);
-    }
+    if (system(command.c_str()) != 0)
+        throw std::runtime_error("Error: Could not create the tarball, files might be missing.");
+
+    std::cout << GREEN << "The project has been exported to " << project.get_name() << ".tar.gz" << RESET << std::endl;
+    exit(0);
 }
 
 void ncurses_menu(char **argv) {
@@ -77,7 +71,7 @@ void ncurses_menu(char **argv) {
             config::ConfigFile config;
             config.load_from_file(".mkpj.conf");
 
-            std::string project_name = config.get_project_info().name;
+            std::string project_name = config.get_project_info().get_name();
 
             mvprintw(1, 0, "You are in the project: %s", project_name.c_str());
         }
@@ -115,7 +109,7 @@ void ncurses_menu(char **argv) {
         for(size_t i = 0; i < choices.size(); i++) {
             if(i == size_t(highlight))
                 attron(A_REVERSE);
-            mvprintw(i+4, 1, choices[i].c_str());
+            mvprintw(i+4, 1, choices[i].c_str(), "%s");
             attroff(A_REVERSE);
         }
         c = getch();
@@ -191,9 +185,12 @@ void ncurses_menu(char **argv) {
     if(std::filesystem::exists(std::filesystem::current_path() / ".mkpj.conf")) {
         collection pairs;
         config::ConfigFile config;
+        config.load_from_file(".mkpj.conf");
+        (config.is_empty() ? throw std::runtime_error("Error: The config file is empty.") : 0);
+        Project project = config.get_project_info();
         switch(choice) {
             case 1:
-                add_cpp_hpp();
+                project.add_cpp_hpp();
                 break;
             case 2:
                 std::cout << "Enter the pair you want to add: ";
@@ -205,13 +202,12 @@ void ncurses_menu(char **argv) {
                 display_pairs(pairs);
                 break;
             case 4:
-                config.load_from_file(".mkpj.conf");
-                create_makefile(config.get_project_info());
+                project.create_makefile(true);
                 std::cout << GREEN << "The makefile has been regenerated." << RESET << std::endl;
                 break;
             case 5:
                 config.load_from_file(".mkpj.conf");
-                tarball_export(config.get_project_info().name);
+                tarball_export(config.get_project_info().get_name());
                 break;
             case 6:
                 exit(0);
@@ -228,7 +224,7 @@ int main(int argc, char **argv) {
     options.add_options()
         // The user can use the -c with or without a project name.
         // If the user doesn't specify a project name, the program will ask for one.
-        ("create", "Creates the project", cxxopts::value<std::string>()->default_value("pr")) //! this needs to be fixed
+        ("create", "Creates the project", cxxopts::value<std::string>())
         ("add", "Adds a cpp/hpp file to the project")
         ("l,list", "Lists all the available pairs")
         ("u,update", "Updates the pair list")
@@ -268,7 +264,6 @@ int main(int argc, char **argv) {
             std::cout
                 << "Available languages : " << std::endl
                 << BLUE << "\t• C++" << std::endl
-                        << "\t• C++ (QT)" << std::endl
                 << RESET <<
             std::endl;
         }
@@ -292,7 +287,12 @@ int main(int argc, char **argv) {
         }
 
         else if (result.count("add")) {
-            add_cpp_hpp();
+            config::ConfigFile config;
+            config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
+            if (!config.is_loaded())
+                throw std::runtime_error("Could not load config file, make sure you are in a project directory");
+            
+            config.get_project_info().add_cpp_hpp();
             exit(0);
         }
 
@@ -304,11 +304,10 @@ int main(int argc, char **argv) {
         else if (result.count("update")) {
             config::ConfigFile config;
             config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
-            if (!config.is_loaded()) {
-                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
-                exit(1);
-            }
-            update_pairs();
+            if (!config.is_loaded())
+                throw std::runtime_error("Could not load config file, make sure you are in a project directory");
+            
+            config.get_project_info().update_pairs();
             std::cout << GREEN << "Pairs updated" << RESET << std::endl;
         }
 
@@ -321,28 +320,19 @@ int main(int argc, char **argv) {
             config::ConfigFile config;
             config.load_from_file(std::filesystem::current_path() / ".mkpj.conf");
 
-            if (!config.is_loaded()) {
-                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
-                exit(1);
-            }
+            if (!config.is_loaded())
+                throw std::runtime_error("Could not load config file, make sure you are in a project directory");                
 
-            Project project = config.get_project_info();
-
-            if (!create_makefile(project, true)) {
-                std::cerr << RED << "Error: Could not create Makefile" << RESET << std::endl;
-                exit(1);
-            }
+            config.get_project_info().create_makefile();
         }
 
         else if (result.count("tarball")) {
             config::ConfigFile config;
             config.load_from_file(".mkpj.conf");
 
-            if (!config.is_loaded()) {
-                std::cerr << RED << "Error: Could not load config file, make sure you are in a project directory" << RESET << std::endl;
-                exit(1);
-            }
-            tarball_export(config.get_project_info().name);
+            if (!config.is_loaded()) 
+                throw std::runtime_error("Could not load config file, make sure you are in a project directory");
+            tarball_export(config.get_project_info().get_name());
         }
 
         else {
@@ -353,7 +343,17 @@ int main(int argc, char **argv) {
     } catch (const cxxopts::OptionException& e) {
         std::cout << options.help() << std::endl;
         exit(0);
+    } catch (const std::runtime_error& e) {
+        std::cerr << RED << e.what() << RESET << std::endl;
+        exit(1);
+    } catch (const std::exception& e) {
+        std::cerr << RED << e.what() << RESET << std::endl;
+        exit(1);
+    } catch (...) {
+        std::cerr << RED << "An unknown error occurred" << RESET << std::endl;
+        exit(1);
     }
 
     return 0;
 }
+
